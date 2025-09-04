@@ -1,0 +1,193 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>Employee Data - No DB</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 40px;
+        }
+
+        h2 {
+            margin-bottom: 30px;
+        }
+
+        input[type="text"], select {
+            width: 250px;
+            padding: 14px;
+            border-radius: 15px;
+            border: 1px solid #ccc;
+            margin: 10px;
+            font-size: 16px;
+        }
+
+        .gender-btn {
+            padding: 10px 25px;
+            margin: 10px;
+            border-radius: 50px;
+            border: 1px solid #ccc;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .selected {
+            background-color: orange;
+            color: white;
+            border: none;
+        }
+
+        #addBtn {
+            padding: 12px 30px;
+            border-radius: 10px;
+            background-color: orange;
+            color: white;
+            font-size: 16px;
+            border: none;
+            margin-top: 20px;
+            cursor: pointer;
+            box-shadow: 2px 2px 5px #aaa;
+        }
+
+        table {
+            width: 90%;
+            margin: 40px auto;
+            border-collapse: collapse;
+        }
+
+        table, th, td {
+            border: 1px solid black;
+            padding: 12px;
+            font-size: 16px;
+        }
+
+        th {
+            background-color: #f5f5f5;
+        }
+
+        td button {
+            padding: 6px 10px;
+            margin: 2px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Html and JQuery only – No Database and no ASP.Net</h2>
+
+    <div>
+        <input type="text" id="empName" placeholder="Employee Name (Text Box)">
+        <select id="city">
+            <option value="">City (Drop down)</option>
+            <option value="New Delhi">New Delhi</option>
+            <option value="Lucknow">Lucknow</option>
+            <option value="Mumbai">Mumbai</option>
+            <option value="Bangalore">Bangalore</option>
+        </select>
+        <br>
+        <input type="text" id="mobile" placeholder="Mobile No (Text Box)">
+        <br>
+        <button class="gender-btn" id="male">M</button>
+        <button class="gender-btn" id="female">F</button>
+        <br>
+        <button id="addBtn">ADD</button>
+    </div>
+
+    <table id="empTable">
+        <thead>
+            <tr>
+                <th>S.No</th>
+                <th>Employee Name</th>
+                <th>City</th>
+                <th>Mobile No</th>
+                <th>Gender</th>
+                <th>Reject</th>
+                <th>Up/Down</th>
+            </tr>
+        </thead>
+        <tbody>
+
+        </tbody>
+    </table>
+
+    <script>
+        let gender = '';
+        let counter = 1;
+
+        $('#male').click(function () {
+            gender = 'M';
+            $('.gender-btn').removeClass('selected');
+            $(this).addClass('selected');
+        });
+
+        $('#female').click(function () {
+            gender = 'F';
+            $('.gender-btn').removeClass('selected');
+            $(this).addClass('selected');
+        });
+
+        $('#addBtn').click(function () {
+            const name = $('#empName').val().trim();
+            const city = $('#city').val();
+            const mobile = $('#mobile').val().trim();
+
+            if (name === '' || city === '' || mobile === '' || gender === '') {
+                alert("Please fill all fields and select gender.");
+                return;
+            }
+
+            const newRow = `
+                    <tr>
+                        <td>${counter}</td>
+                        <td>${name}</td>
+                        <td>${city}</td>
+                        <td>${mobile}</td>
+                        <td>${gender}</td>
+                        <td><button class="rejectBtn">Reject</button></td>
+                        <td>
+                            <button class="upBtn">⬆️</button>
+                            <button class="downBtn">⬇️</button>
+                        </td>
+                    </tr>
+                `;
+
+            $('#empTable tbody').append(newRow);
+            counter++;
+
+            $('#empName').val('');
+            $('#city').val('');
+            $('#mobile').val('');
+            gender = '';
+            $('.gender-btn').removeClass('selected');
+        });
+
+        $(document).on('click', '.rejectBtn', function () {
+            $(this).closest('tr').remove();
+            updateSerialNumbers();
+        });
+
+        $(document).on('click', '.upBtn', function () {
+            const row = $(this).closest('tr');
+            row.prev().before(row);
+            updateSerialNumbers();
+        });
+
+        $(document).on('click', '.downBtn', function () {
+            const row = $(this).closest('tr');
+            row.next().after(row);
+            updateSerialNumbers();
+        });
+
+        function updateSerialNumbers() {
+            $('#empTable tbody tr').each(function (index) {
+                $(this).find('td:first').text(index + 1);
+            });
+            counter = $('#empTable tbody tr').length + 1;
+        }
+    </script>
+
+</body>
+</html>

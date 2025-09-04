@@ -1,0 +1,1 @@
+It is in Index.html file. From line 1 - 114 is the code in Html for the Buttons, their size and padding etc. From line 116 to 190 is the JQuery code. First part is for Buttons Actions, then we have variables to take the input and then again the button sections for table to reject or up/down the candidate. 
